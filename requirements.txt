@@ -1,0 +1,5 @@
+# 핵심: 표준 라이브러리만으로 동작 (sqlite3, 자체 구현 BM25/RRF/rerank)
+# 아래는 "실제" LLM/임베딩을 붙일 때만 필요 (없어도 오프라인 데모 동작)
+google-genai>=1.0.0   # Gemini 3.5 Flash 에이전트 (GEMINI_API_KEY 또는 GOOGLE_API_KEY)
+voyageai>=0.3.0       # 임베딩 (VOYAGE_API_KEY) — 선택
+# anthropic>=0.40.0   # (레거시) Claude 경로를 쓰려면 주석 해제

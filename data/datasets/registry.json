@@ -1,0 +1,104 @@
+[
+  {
+    "dataset_id": "15130420", "source": "koroad", "domain": "교통안전", "doc_type": "accident_stat",
+    "title_template": "{region} 노면상태별 교통사고 {period} ({노면상태})",
+    "text_template": "{period}년 {region} 노면상태 '{노면상태}' 교통사고 {사고건수}건, 사망 {사망자수}명, 부상 {부상자수}명.",
+    "region_field": "시도", "period_field": "기준연도",
+    "metrics": {"count": "사고건수", "death": "사망자수", "injury": "부상자수"},
+    "string_metrics": {"surface": "노면상태"},
+    "tag_fields": ["노면상태"], "id_fields": ["기준연도", "노면상태", "시도"],
+    "provenance_url": "https://www.data.go.kr/data/15130420/fileData.do",
+    "source_file": "koroad_surface_accident.csv"
+  },
+  {
+    "dataset_id": "15070288", "source": "koroad", "domain": "교통안전", "doc_type": "accident_stat",
+    "title_template": "{region} 도로종류별 교통사고 {period} ({도로종류})",
+    "text_template": "{period}년 {region} {도로종류} 교통사고 {사고건수}건, 사망 {사망자수}명, 부상 {부상자수}명.",
+    "region_field": "시도", "period_field": "기준연도",
+    "metrics": {"count": "사고건수", "death": "사망자수", "injury": "부상자수"},
+    "string_metrics": {"roadtype": "도로종류"},
+    "tag_fields": ["도로종류"], "id_fields": ["기준연도", "도로종류", "시도"],
+    "provenance_url": "https://www.data.go.kr/data/15070288/fileData.do",
+    "source_file": "koroad_roadtype_accident.csv"
+  },
+  {
+    "dataset_id": "15142616", "source": "korea_expressway", "domain": "도로시설", "doc_type": "pothole",
+    "title_template": "{노선명} 포트홀 발생/배상 현황 {period}",
+    "text_template": "{period}년 {노선명} 구간 포트홀 {포트홀발생건수}건 발생, 배상 {배상건수}건/{배상금액_백만원}백만원.",
+    "period_field": "기준연도", "road_field": "노선명",
+    "metrics": {"count": "포트홀발생건수", "claim_count": "배상건수", "claim_amount": "배상금액_백만원"},
+    "tag_fields": ["노선명"], "id_fields": ["노선명", "기준연도"],
+    "provenance_url": "https://www.data.go.kr/data/15142616/fileData.do",
+    "source_file": "korea_expressway_pothole.csv"
+  },
+  {
+    "dataset_id": "15081752", "source": "daejeon_city", "domain": "도로시설", "doc_type": "road_infra",
+    "title_template": "대전 {자치구} 도로 현황 {period}",
+    "text_template": "대전 {자치구} 도로 총연장 {도로연장_km}km, 포장률 {포장률}%.",
+    "region_field": "자치구", "period_field": "기준연도", "lat_field": "위도", "lng_field": "경도",
+    "metrics": {"road_length_km": "도로연장_km", "pavement_rate": "포장률"},
+    "tag_fields": ["자치구"], "id_fields": ["자치구", "기준연도"],
+    "provenance_url": "https://www.data.go.kr/data/15081752/fileData.do",
+    "source_file": "daejeon_road_status.csv"
+  },
+  {
+    "dataset_id": "15073861", "source": "airkorea", "domain": "대기환경", "doc_type": "air_quality",
+    "title_template": "{region} 대기질 현황 {period}",
+    "text_template": "{period}년 {region} 미세먼지 PM10 {PM10}㎍/㎥, 초미세먼지 PM2.5 {PM25}㎍/㎥, 오존 {오존}ppm. 측정소 {측정소수}개.",
+    "region_field": "시도", "period_field": "기준연도",
+    "metrics": {"pm10": "PM10", "pm25": "PM25", "ozone": "오존", "stations": "측정소수"},
+    "tag_fields": [], "id_fields": ["시도", "기준연도"],
+    "provenance_url": "https://www.data.go.kr/data/15073861/openapi.do",
+    "source_file": "airquality.csv"
+  },
+  {
+    "dataset_id": "15060386", "source": "nfa", "domain": "재난안전", "doc_type": "fire_stat",
+    "title_template": "{region} 화재 발생 현황 {period}",
+    "text_template": "{period}년 {region} 화재 {화재건수}건, 사망 {사망자수}명, 부상 {부상자수}명, 재산피해 {재산피해_천원}천원.",
+    "region_field": "시도", "period_field": "기준연도",
+    "metrics": {"count": "화재건수", "death": "사망자수", "injury": "부상자수", "property_damage_kw": "재산피해_천원"},
+    "tag_fields": [], "id_fields": ["시도", "기준연도"],
+    "provenance_url": "https://www.data.go.kr/data/15060386/fileData.do",
+    "source_file": "fire_incidents.csv"
+  },
+  {
+    "dataset_id": "15097972", "source": "mois", "domain": "인구", "doc_type": "population",
+    "title_template": "{region} 주민등록 인구 {period}",
+    "text_template": "{period}년 {region} 인구 {인구수}명 (남 {남자}명, 여 {여자}명), 65세 이상 고령인구 {고령인구}명.",
+    "region_field": "시도", "period_field": "기준연도",
+    "metrics": {"population": "인구수", "male": "남자", "female": "여자", "elderly": "고령인구"},
+    "tag_fields": [], "id_fields": ["시도", "기준연도"],
+    "provenance_url": "https://www.data.go.kr/data/15097972/fileData.do",
+    "source_file": "population.csv"
+  },
+  {
+    "dataset_id": "15013094", "source": "local_gov", "domain": "생활안전", "doc_type": "facility",
+    "title_template": "{region} 방범용 CCTV 설치 현황 {period}",
+    "text_template": "{period}년 {region} 방범용 CCTV {CCTV대수}대 설치 (설치지점 {설치지점수}곳).",
+    "region_field": "시도", "period_field": "기준연도",
+    "metrics": {"cctv_count": "CCTV대수", "site_count": "설치지점수"},
+    "tag_fields": [], "id_fields": ["시도", "기준연도"],
+    "provenance_url": "https://www.data.go.kr/data/15013094/fileData.do",
+    "source_file": "safety_cctv.csv"
+  },
+  {
+    "dataset_id": "15013116", "source": "local_gov", "domain": "생활복지", "doc_type": "facility",
+    "title_template": "{region} 공공와이파이 설치 현황 {period}",
+    "text_template": "{period}년 {region} 공공와이파이 AP {AP설치수}개 설치.",
+    "region_field": "시도", "period_field": "기준연도",
+    "metrics": {"ap_count": "AP설치수"},
+    "tag_fields": [], "id_fields": ["시도", "기준연도"],
+    "provenance_url": "https://www.data.go.kr/data/15013116/fileData.do",
+    "source_file": "public_wifi.csv"
+  },
+  {
+    "dataset_id": "internal-vision", "source": "gnsoft_vision", "domain": "도로시설", "doc_type": "vision_detection",
+    "title_template": "[사내 비전] {도로명} {detected_class} 탐지",
+    "text_template": "Vision AI가 {도로명}({region}) 노면 영상에서 {detected_class}를 탐지(신뢰도 {confidence}). 탐지일시 {탐지일시}.",
+    "period_field": "탐지일시", "lat_field": "위도", "lng_field": "경도", "road_field": "도로명",
+    "metrics": {"count": "confidence"}, "string_metrics": {"detected_class": "detected_class"},
+    "tag_fields": ["detected_class", "도로명"], "id_fields": ["image_id"],
+    "provenance_url": "internal://vision",
+    "source_file": "vision_detections.csv"
+  }
+]

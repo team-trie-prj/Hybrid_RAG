@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>대전 하이브리드 RAG — 도로 안전 지능형 검색</title>
+<style>
+  :root{--bg:#0f1218;--card:#171c26;--line:#27303f;--txt:#e6eaf2;--mut:#8b95a7;
+        --accent:#4f8cff;--vision:#a06bff;--public:#28a16b;--warn:#e0a23b}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font-family:"맑은 고딕","Malgun Gothic",system-ui,sans-serif;line-height:1.6}
+  header{padding:20px 28px;border-bottom:1px solid var(--line)}
+  header h1{margin:0;font-size:20px}
+  header p{margin:4px 0 0;color:var(--mut);font-size:13px}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px 28px}
+  .tabs{display:flex;gap:8px;margin-bottom:18px}
+  .tab{padding:8px 16px;border:1px solid var(--line);border-radius:8px;cursor:pointer;
+       background:var(--card);color:var(--mut);font-size:14px}
+  .tab.active{color:var(--txt);border-color:var(--accent)}
+  .qbar{display:flex;gap:10px;margin-bottom:10px}
+  .qbar input{flex:1;padding:13px 16px;border-radius:10px;border:1px solid var(--line);
+              background:var(--card);color:var(--txt);font-size:15px}
+  button{padding:12px 18px;border:0;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600}
+  .primary{background:var(--accent);color:#fff}
+  .ghost{background:var(--card);color:var(--txt);border:1px solid var(--line)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .chip{font-size:12px;padding:6px 11px;border-radius:20px;background:var(--card);
+        border:1px solid var(--line);color:var(--mut);cursor:pointer}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+  .card h2{margin:0 0 12px;font-size:15px}
+  .muted{color:var(--mut);font-size:13px}
+  .badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600}
+  .b-vision{background:rgba(160,107,255,.15);color:var(--vision)}
+  .b-public{background:rgba(40,161,107,.15);color:var(--public)}
+  .b-prov{background:rgba(79,140,255,.13);color:var(--accent)}
+  .hit{padding:12px 0;border-bottom:1px solid var(--line)}
+  .hit:last-child{border:0}
+  .hit .t{font-weight:600;font-size:14px;margin:5px 0 3px}
+  .hit a{color:var(--accent);text-decoration:none;font-size:12px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--mut);font-weight:600}
+  .bar{height:8px;border-radius:4px;background:var(--accent)}
+  .answer{white-space:pre-wrap;font-size:13.5px;background:#0c0f15;border:1px solid var(--line);
+          border-radius:8px;padding:14px;color:#cdd6e6}
+  .hidden{display:none}
+  .hrow{padding:11px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .spin{color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <h1>대전 하이브리드 RAG · 도로 안전 지능형 검색</h1>
+  <p>사내 비전 데이터 + 공공데이터포털 연계 — 자연어 질의 → 하이브리드 검색 → 요약·보고서</p>
+</header>
+
+<div class="wrap">
+  <div class="tabs">
+    <div class="tab active" data-tab="search">질의 / 검색</div>
+    <div class="tab" data-tab="history">질의 이력</div>
+  </div>
+
+  <!-- 검색 화면 -->
+  <section id="search">
+    <div class="qbar">
+      <input id="q" placeholder="예) 대전 유성구 포트홀 영역을 찾아줘" />
+      <button class="primary" onclick="ask()">검색·질의</button>
+      <button class="ghost" onclick="makeReport()">보고서(.docx)</button>
+    </div>
+    <div class="chips">
+      <span class="chip" onclick="fill('대전 유성구 포트홀 영역을 찾아줘')">포트홀 찾기</span>
+      <span class="chip" onclick="fill('전국에서 화재가 가장 많은 지역은?')">화재 순위</span>
+      <span class="chip" onclick="fill('대전 미세먼지 현황 알려줘')">미세먼지</span>
+      <span class="chip" onclick="fill('인구가 많은 지역 순위 보여줘')">인구 순위</span>
+      <span class="chip" onclick="fill('대전 노면상태별 교통사고를 요약해서 보고서로 만들어줘')">교통사고 보고서</span>
+    </div>
+
+    <div id="domains" class="muted" style="margin-bottom:14px"></div>
+    <div id="status" class="spin"></div>
+
+    <div id="answerCard" class="card hidden">
+      <h2>AI 응답 / 요약 <span id="provBadge" class="badge b-prov"></span></h2>
+      <div id="answer" class="answer"></div>
+    </div>
+
+    <div id="hitsCard" class="card hidden">
+      <h2>검색 결과 — 하이브리드(의미+키워드) + 재정렬</h2>
+      <div id="hits"></div>
+    </div>
+
+    <div id="linkCard" class="card hidden">
+      <h2>공공데이터 연계</h2>
+      <div id="links"></div>
+    </div>
+
+    <div id="statsCard" class="card hidden">
+      <h2 id="statsTitle">통계 집계</h2>
+      <table><thead><tr><th id="statsCol">구분</th><th>값</th><th style="width:45%">비율</th></tr></thead>
+      <tbody id="stats"></tbody></table>
+    </div>
+  </section>
+
+  <!-- 이력 화면 -->
+  <section id="history" class="hidden">
+    <div class="card">
+      <h2>질의 / 응답 이력 <span class="muted">(데이터·이력 관리 체계)</span></h2>
+      <div id="historyList" class="spin">불러오는 중…</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+function fill(t){ $('#q').value = t; }
+
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.onclick = ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const id = tab.dataset.tab;
+    $('#search').classList.toggle('hidden', id!=='search');
+    $('#history').classList.toggle('hidden', id!=='history');
+    if(id==='history') loadHistory();
+  };
+});
+
+const TYPE_KO = {pothole:'포트홀', accident_stat:'사고통계', road_infra:'도로인프라', vision_detection:'비전탐지'};
+
+async function ask(){
+  const q = $('#q').value.trim(); if(!q) return;
+  $('#status').textContent = '검색 중…';
+  ['answerCard','hitsCard','linkCard','statsCard'].forEach(i=>$('#'+i).classList.add('hidden'));
+  const r = await fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},
+                                    body:JSON.stringify({question:q})});
+  const d = await r.json();
+  $('#status').textContent = '';
+
+  const tag = (d.domain||'전체') + ' · ' + (d.region||'전국');
+  $('#provBadge').textContent = tag;
+  $('#answer').textContent = d.answer;
+  $('#answerCard').classList.remove('hidden');
+
+  // 검색 결과
+  $('#hits').innerHTML = d.hits.map(h=>{
+    const isV = h.source==='gnsoft_vision';
+    const badge = isV ? '<span class="badge b-vision">사내 비전</span>'
+                      : '<span class="badge b-public">공공데이터</span>';
+    const url = h.provenance.url||'';
+    const link = url.startsWith('http') ? `<a href="${url}" target="_blank">출처 ${h.provenance.dataset_id} ↗</a>` : `<span class="muted">${url}</span>`;
+    return `<div class="hit">${badge} <span class="muted">${TYPE_KO[h.doc_type]||h.doc_type} · 점수 ${h._score}</span>
+      <div class="t">${h.title}</div>
+      <div class="muted">${(h.text||'').slice(0,90)}…</div>${link}</div>`;
+  }).join('') || '<div class="muted">결과 없음</div>';
+  $('#hitsCard').classList.remove('hidden');
+
+  // 공공데이터 연계
+  $('#links').innerHTML = d.sources.length
+    ? d.sources.map(u=>`<div class="hrow"><a href="${u}" target="_blank" style="color:var(--accent)">${u}</a></div>`).join('')
+    : '<div class="muted">연계된 공공데이터 출처 없음</div>';
+  $('#linkCard').classList.remove('hidden');
+
+  // 통계 (도메인에 맞춰 동적)
+  if(d.stats && d.stats.length){
+    $('#statsTitle').textContent = `통계 집계 — ${d.metric_label||'값'}`;
+    $('#statsCol').textContent = d.group_by||'구분';
+    const max = Math.max(...d.stats.map(s=>s.value||0)) || 1;
+    $('#stats').innerHTML = d.stats.map(s=>`<tr><td>${s.label}</td><td>${(s.value||0).toLocaleString()}</td>
+      <td><div class="bar" style="width:${Math.round((s.value||0)/max*100)}%"></div></td></tr>`).join('');
+    $('#statsCard').classList.remove('hidden');
+  } else { $('#statsCard').classList.add('hidden'); }
+}
+
+async function loadDomains(){
+  try{
+    const r = await fetch('/api/domains'); const ds = await r.json();
+    $('#domains').innerHTML = '적재 도메인: ' +
+      ds.map(d=>`<b style="color:var(--txt)">${d.domain}</b>(${d.count})`).join(' · ');
+  }catch(e){}
+}
+loadDomains();
+
+async function makeReport(){
+  const q = $('#q').value.trim(); if(!q) return;
+  $('#status').textContent = '보고서 생성 중…';
+  const r = await fetch('/api/report',{method:'POST',headers:{'Content-Type':'application/json'},
+                                       body:JSON.stringify({question:q})});
+  const d = await r.json();
+  $('#status').textContent = '';
+  if(d.download){ window.location = d.download; }
+}
+
+async function loadHistory(){
+  const r = await fetch('/api/history'); const rows = await r.json();
+  $('#historyList').innerHTML = rows.length
+    ? rows.map(h=>`<div class="hrow">
+        <span class="badge b-prov">${h.provider}</span>
+        <span class="muted"> ${h.ts} · 도구 [${(h.tools_used||[]).join(', ')}]</span>
+        <div style="margin-top:4px">${h.question}</div></div>`).join('')
+    : '<div class="muted">이력이 없습니다.</div>';
+}
+
+$('#q').addEventListener('keydown', e=>{ if(e.key==='Enter') ask(); });
+</script>
+</body>
+</html>
