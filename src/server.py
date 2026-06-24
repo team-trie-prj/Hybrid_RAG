@@ -4,6 +4,7 @@
   GET  /                 → web/index.html
   POST /api/ask          {question} → {answer, provider, intent, hits, stats, sources}
   GET  /api/history      → 질의 이력
+  GET  /api/trace[?run_id=] → 에이전트 단계별 실행 트레이스 (FR-AGT-004)
   POST /api/report       {question} → {path}  (.docx 생성)
   GET  /download/report  → 생성된 보고서 다운로드
 
@@ -41,6 +42,7 @@ def _ask_payload(question: str) -> dict:
     sources = sorted({h["provenance"].get("url", "") for h in hits if h["provenance"].get("url")})
     return {"answer": answer, "intent": intent,
             "domain": intent["domain"], "region": intent["region"],
+            "intent_label": intent["intent"], "module": intent["module"],
             "metric_label": label, "group_by": group_by,
             "hits": hits, "stats": stats, "sources": [s for s in sources if s]}
 
@@ -63,6 +65,11 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200, f.read(), "text/html; charset=utf-8")
         if self.path == "/api/history":
             return self._send(200, agent.history(_IDX, 30))
+        if self.path.startswith("/api/trace"):
+            from urllib.parse import urlparse, parse_qs
+            qs = parse_qs(urlparse(self.path).query)
+            run_id = (qs.get("run_id") or [None])[0]
+            return self._send(200, agent.trace(run_id, _IDX, limit=200))
         if self.path == "/api/domains":
             return self._send(200, _IDX.domains())
         if self.path.startswith("/api/docs"):

@@ -18,7 +18,8 @@ from datetime import datetime, timezone
 import llm
 import regions
 from retrieve import Index
-from schema import connect, get_cached_answer, get_history, log_query
+from schema import (connect, ensure_schema, get_cached_answer, get_history,
+                    get_trace, log_query, log_trace)
 
 TOOLS = [
     {
@@ -63,8 +64,25 @@ SYSTEM = (
     "당신은 대한민국 공공데이터와 사내 비전(영상분석) 데이터를 검색·분석하는 지능형 에이전트다. "
     "사용자 자연어 질의의 의도를 파악해 도구를 호출한다. 적재 범위를 모르면 list_domains를 먼저 호출한다. "
     "위치·현황·사례 검색은 hybrid_search, 통계·순위·합계는 aggregate를 쓴다. "
-    "지역이 지정되면 region으로 한정한다. 답변은 한국어로 간결하게, 반드시 출처(provenance.url)를 함께 제시한다."
+    "지역이 지정되면 region으로 한정한다. 답변은 한국어로 간결하게, 반드시 출처(provenance.url)를 함께 제시한다. "
+    "[중요·환각 억제] 도구 검색 결과에 근거가 없으면 사실을 지어내지 말고 "
+    "'관련 정보를 찾을 수 없습니다.'라고 명시적으로 답한다. 검색 결과에 없는 수치·고유명사는 생성하지 않는다."
 )
+
+# 정보 부재 판정 임계값(질의어 적중률) 및 안내 문구 — FR-RAG-009 / AT-RAG-06
+NO_RESULT_THRESHOLD = 0.10
+NO_RESULT_MSG = ("관련 정보를 찾을 수 없습니다. 지식베이스(공공데이터·사내 비전)에 "
+                 "해당 질의를 뒷받침할 근거 문서가 없어 답변을 생성하지 않았습니다.")
+
+# 질의 의도 4종(요구사항 FR-RAG-002) → 처리 모듈명(FR-AGT-001 라우팅 메타)
+INTENT_MODULE = {
+    "문서검색": "RAG",
+    "이미지분석": "VLM",
+    "통계조회": "공공데이터",
+    "보고서생성": "보고서",
+}
+IMAGE_KW = ("이미지", "사진", "영상", "그림", "업로드", "첨부", "라벨링",
+            "바운딩", "bbox", "포트홀 영역", "탐지해", "탐지된")
 
 DOMAIN_KW = {
     "대기환경": ["미세먼지", "초미세먼지", "대기", "오존", "pm10", "pm2.5", "pm", "공기"],
@@ -116,20 +134,60 @@ def _dispatch(idx: Index, name: str, args: dict):
 
 
 # ─────────────────────────────────────────── 질의 의도 분석 (폴백/로깅용)
+def classify_intent(q: str, is_stats: bool, is_report: bool) -> str:
+    """질의를 4종 의도로 분류 (FR-RAG-002).
+
+    우선순위: 보고서생성 > 이미지분석 > 통계조회 > 문서검색.
+    AT-RAG-01 예: '포트홀 보수 절차를 알려줘' → 문서검색.
+    """
+    ql = q.lower()
+    if is_report:
+        return "보고서생성"
+    if any(k in ql for k in IMAGE_KW):
+        return "이미지분석"
+    if is_stats:
+        return "통계조회"
+    return "문서검색"
+
+
 def analyze_intent(q: str) -> dict:
     ql = q.lower()
     domain = next((d for d, kws in DOMAIN_KW.items() if any(k in ql for k in kws)), None)
     reg = regions.resolve(q)
+    is_stats = any(w in q for w in ("통계", "건수", "순위", "가장", "최다", "평균", "합계", "비교", "몇"))
+    is_report = any(w in q for w in ("보고서", "요약", "정리", "브리핑"))
+    intent = classify_intent(q, is_stats, is_report)
     return {
         "domain": domain,
         "region": reg["region_name"],
         "sido_cd": reg["sido_cd"], "sigungu_cd": reg["sigungu_cd"],
-        "is_stats": any(w in q for w in ("통계", "건수", "순위", "가장", "최다", "평균", "합계", "비교", "몇")),
-        "is_report": any(w in q for w in ("보고서", "요약", "정리", "브리핑")),
+        "is_stats": is_stats,
+        "is_report": is_report,
+        "intent": intent,                      # 문서검색|이미지분석|통계조회|보고서생성
+        "module": INTENT_MODULE[intent],       # 라우팅 모듈명 (응답 메타)
     }
 
 
-def _fallback(question: str, idx: Index) -> str:
+def _summarize_result(result: Any) -> Any:
+    """도구 결과 → 트레이스용 요약(JSON 직렬화 가능, 입력·결과 추적)."""
+    if isinstance(result, list):
+        head = []
+        for r in result[:3]:
+            if isinstance(r, dict):
+                head.append(r.get("title") or r.get("group") or r.get("domain") or str(r)[:50])
+            else:
+                head.append(str(r)[:50])
+        return {"n": len(result), "head": head}
+    if isinstance(result, (int, float, str)):
+        return {"value": result}
+    return {"value": str(result)[:160]}
+
+
+def _fallback(question: str, idx: Index) -> tuple[str, list[dict[str, Any]]]:
+    """오프라인 규칙 라우터. (응답 텍스트, 단계별 트레이스)를 반환.
+
+    질의어 적중률이 임계값 미만이고 통계 의도도 아니면 '정보 없음'으로 환각을 억제한다.
+    """
     intent = analyze_intent(question)
     flt = {}
     if intent["domain"]:
@@ -139,16 +197,35 @@ def _fallback(question: str, idx: Index) -> str:
     elif intent["sido_cd"]:
         flt["sido_cd"] = intent["sido_cd"]
 
+    steps: list[dict[str, Any]] = []
     out = ["[오프라인 폴백 라우터 — GEMINI_API_KEY 설정 시 Gemini 3.1 Flash-Lite가 응답]"]
-    out.append(f"의도: domain={intent['domain'] or '전체'} / region={intent['region'] or '전국'}\n")
+    out.append(f"의도: {intent['intent']} → {intent['module']} 모듈 "
+               f"(domain={intent['domain'] or '전체'} / region={intent['region'] or '전국'})\n")
 
-    if not intent["is_stats"] or intent["is_report"]:
-        out.append("◆ 하이브리드 검색 결과 (의미+키워드 융합 → 재정렬)")
-        for h in idx.hybrid_search(question, filters=flt, k=5):
+    want_search = (not intent["is_stats"]) or intent["is_report"]
+    want_stats = intent["is_stats"] or intent["is_report"]
+
+    hits: list[dict[str, Any]] = []
+    if want_search:
+        args = {"query": question, "filters": flt, "k": 5}
+        hits = idx.hybrid_search(question, filters=flt, k=5)
+        steps.append({"tool_name": "hybrid_search", "tool_input": args,
+                      "result_summary": _summarize_result(hits)})
+
+    # 환각 억제: 검색 의도인데 관련 근거가 없고 통계로도 답할 수 없으면 '정보 없음'
+    if want_search and not want_stats and Index.best_relevance(hits) < NO_RESULT_THRESHOLD:
+        out.append(NO_RESULT_MSG)
+        return "\n".join(out), steps
+
+    if want_search:
+        out.append("◆ 하이브리드 검색 결과 (의미+키워드 융합 → 관련도 재정렬)")
+        for h in hits:
             src = "사내 비전" if h["source"] == "gnsoft_vision" else "공공"
-            out.append(f"  - [{src}/{h['domain']}] {h['title']}  → {h['provenance'].get('url')}")
+            out.append(f"  - [{src}/{h['domain']}] {h['title']} "
+                       f"(유사도 {h.get('_similarity')}, 재정렬 {h.get('_rank_before')}→{h.get('_rank_after')}위) "
+                       f"→ {h['provenance'].get('url')}")
 
-    if intent["is_stats"] or intent["is_report"]:
+    if want_stats:
         metric, label = DOMAIN_METRIC.get(intent["domain"] or "교통안전", ("count", "건수"))
         group_by = "surface" if "노면" in question else (
             "roadtype" if "도로종류" in question else "region_name")
@@ -156,16 +233,36 @@ def _fallback(question: str, idx: Index) -> str:
         if group_by == "region_name":      # 지역 비교 시 지역 필터 해제
             agg_flt.pop("sido_cd", None); agg_flt.pop("sigungu_cd", None)
         rows = idx.stats_query(metric, group_by, agg_flt)
+        steps.append({"tool_name": "aggregate",
+                      "tool_input": {"metric": metric, "group_by": group_by, "filters": agg_flt},
+                      "result_summary": _summarize_result(rows)})
         out.append(f"\n◆ 집계: {label} (그룹: {group_by})")
         for r in rows[:6]:
             out.append(f"  - {r['group']}: {int(r[metric]):,}")
-    return "\n".join(out)
+    return "\n".join(out), steps
+
+
+def _persist_trace(conn, run_id: str, ts: str, intent: dict,
+                   steps: list[dict[str, Any]], answer: str) -> None:
+    """단계별 실행 트레이스 기록: 의도분석 → 도구호출(입력·결과) → 최종답변 (AT-AGT-02)."""
+    n = 1
+    log_trace(conn, run_id, ts, n, "intent", module=intent["module"],
+              detail={"intent": intent["intent"], "domain": intent["domain"],
+                      "region": intent["region"]})
+    for s in steps:
+        n += 1
+        log_trace(conn, run_id, ts, n, "tool_call", module=intent["module"],
+                  tool_name=s.get("tool_name", ""), tool_input=s.get("tool_input"),
+                  detail=s.get("result_summary"))
+    log_trace(conn, run_id, ts, n + 1, "final", module=intent["module"],
+              detail={"answer_preview": answer[:300]})
 
 
 def ask(question: str, idx: Index | None = None, log: bool = True) -> str:
     idx = idx or Index()
     intent = analyze_intent(question)
     tools_used: list[str] = []
+    steps: list[dict[str, Any]] = []
 
     # 캐시 우선: 동일 질의의 이전 Gemini 응답이 있으면 재사용(일일 한도 절약).
     cached = None
@@ -180,8 +277,9 @@ def ask(question: str, idx: Index | None = None, log: bool = True) -> str:
         tools_used = ["cache"]
     elif llm.gemini_available():
         try:
-            answer, tools_used = llm.run_agent(
-                question, SYSTEM, TOOLS, lambda n, a: _dispatch(idx, n, a))
+            answer, tools_used, steps = llm.run_agent(
+                question, SYSTEM, TOOLS, lambda n, a: _dispatch(idx, n, a),
+                summarize=_summarize_result)
             provider = "gemini"
         except Exception as e:
             msg = str(e)
@@ -206,20 +304,21 @@ def ask(question: str, idx: Index | None = None, log: bool = True) -> str:
                 note = "[Gemini 일시적 과부하(503) — 재시도 후에도 실패. 아래는 오프라인 라우터 응답]"
             else:
                 note = f"[Gemini 호출 실패: {msg[:140]} … 아래는 오프라인 라우터 응답]"
-            answer = note + "\n" + _fallback(question, idx)
+            fb_text, steps = _fallback(question, idx)
+            answer = note + "\n" + fb_text
             provider = "offline"
+            tools_used = [s["tool_name"] for s in steps]
     else:
-        answer = _fallback(question, idx)
+        answer, steps = _fallback(question, idx)
         provider = "offline"
-        if not intent["is_stats"] or intent["is_report"]:
-            tools_used.append("hybrid_search")
-        if intent["is_stats"] or intent["is_report"]:
-            tools_used.append("aggregate")
+        tools_used = [s["tool_name"] for s in steps]
 
     if log:
         ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
         conn = connect(idx.db_path)
+        ensure_schema(conn)  # agent_trace 등 신규 테이블 보장(기존 DB 마이그레이션)
         log_query(conn, ts, question, intent, tools_used, answer, provider)
+        _persist_trace(conn, run_id=ts, ts=ts, intent=intent, steps=steps, answer=answer)
         conn.close()
     return answer
 
@@ -228,6 +327,17 @@ def history(idx: Index | None = None, limit: int = 20) -> list[dict]:
     idx = idx or Index()
     conn = connect(idx.db_path)
     rows = get_history(conn, limit)
+    conn.close()
+    return rows
+
+
+def trace(run_id: str | None = None, idx: Index | None = None,
+          limit: int = 200) -> list[dict]:
+    """에이전트 실행 트레이스 조회 (FR-AGT-004). run_id 미지정 시 최근 단계 반환."""
+    idx = idx or Index()
+    conn = connect(idx.db_path)
+    ensure_schema(conn)
+    rows = get_trace(conn, run_id, limit)
     conn.close()
     return rows
 

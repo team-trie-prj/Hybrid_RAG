@@ -162,7 +162,8 @@ async function ask(){
   const d = await r.json();
   $('#status').textContent = '';
 
-  const tag = (d.domain||'전체') + ' · ' + (d.region||'전국');
+  const routed = d.module ? `${d.intent_label} → ${d.module}모듈` : '';
+  const tag = [routed, (d.domain||'전체'), (d.region||'전국')].filter(Boolean).join(' · ');
   $('#provBadge').textContent = tag;
   $('#answer').textContent = d.answer;
   $('#answerCard').classList.remove('hidden');
@@ -174,7 +175,9 @@ async function ask(){
                       : '<span class="badge b-public">공공데이터</span>';
     const url = h.provenance.url||'';
     const link = url.startsWith('http') ? `<a href="${url}" target="_blank">출처 ${h.provenance.dataset_id} ↗</a>` : `<span class="muted">${url}</span>`;
-    return `<div class="hit">${badge} <span class="muted">${TYPE_KO[h.doc_type]||h.doc_type} · 점수 ${h._score}</span>
+    const sim = h._similarity!=null ? Math.round(h._similarity*100)+'%' : h._score;
+    const rerank = (h._rank_before!=null && h._rank_after!=null) ? ` · 재정렬 ${h._rank_before}→${h._rank_after}위` : '';
+    return `<div class="hit">${badge} <span class="muted">${TYPE_KO[h.doc_type]||h.doc_type} · 유사도 ${sim}${rerank}</span>
       <div class="t">${h.title}</div>
       <div class="muted">${(h.text||'').slice(0,90)}…</div>${link}</div>`;
   }).join('') || '<div class="muted">결과 없음</div>';

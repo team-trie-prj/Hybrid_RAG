@@ -43,12 +43,15 @@ def run_agent(
     tools_spec: list[dict[str, Any]],
     dispatch: Callable[[str, dict], Any],
     max_turns: int = 6,
-) -> tuple[str, list[str]]:
+    summarize: Callable[[Any], Any] | None = None,
+) -> tuple[str, list[str], list[dict[str, Any]]]:
     """Gemini 수동 function-calling 멀티턴 루프.
 
     tools_spec: [{name, description, input_schema(JSON schema)} ...]
     dispatch:   (tool_name, args) -> JSON 직렬화 가능한 결과
-    반환: (최종 텍스트, 호출된 도구명 리스트)
+    summarize:  도구 결과 → 트레이스용 요약(JSON 직렬화 가능). 없으면 원본 사용.
+    반환: (최종 텍스트, 호출된 도구명 리스트, 단계별 트레이스)
+          트레이스 = [{tool_name, tool_input, result_summary} ...] (호출 순서 보존)
     """
     from google import genai
     from google.genai import types
@@ -66,6 +69,7 @@ def run_agent(
 
     contents: list[Any] = [types.Content(role="user", parts=[types.Part(text=question)])]
     used: list[str] = []
+    trace: list[dict[str, Any]] = []
 
     for _ in range(max_turns):
         resp = _generate_with_retry(client, contents, config)
@@ -75,16 +79,19 @@ def run_agent(
 
         if not calls:
             text = "".join(p.text for p in parts if getattr(p, "text", None)) or "(빈 응답)"
-            return text, used
+            return text, used, trace
 
         contents.append(cand.content)  # 모델의 tool_call 턴 누적
         fr_parts = []
         for call in calls:
             used.append(call.name)
-            result = dispatch(call.name, dict(call.args or {}))
+            args = dict(call.args or {})
+            result = dispatch(call.name, args)
+            trace.append({"tool_name": call.name, "tool_input": args,
+                          "result_summary": summarize(result) if summarize else result})
             fr_parts.append(
                 types.Part.from_function_response(name=call.name, response={"result": result})
             )
         contents.append(types.Content(role="user", parts=fr_parts))
 
-    return "(function call 한도 초과)", used
+    return "(function call 한도 초과)", used, trace

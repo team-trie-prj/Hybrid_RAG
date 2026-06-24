@@ -56,6 +56,28 @@ def fetch_openapi(endpoint: str, params: Optional[dict] = None,
     return {"xml_items": [{c.tag: c.text for c in item} for item in root.iter("item")]}
 
 
+def fetch_openapi_safe(endpoint: str, params: Optional[dict] = None,
+                       page: int = 1, rows: int = 100, data_type: str = "JSON"
+                       ) -> dict[str, Any]:
+    """fetch_openapi의 graceful 래퍼 (FR-PUB-006 / AT-PUB-05).
+
+    외부 API 장애(미인증/네트워크/타임아웃/HTTP 오류)에도 예외를 전파하지 않고
+    {ok, data} 또는 {ok:False, error, user_message}를 반환한다.
+    호출부는 ok=False 시 사용자 친화적 안내(user_message)를 표출하면 된다.
+    """
+    if not has_key():
+        return {"ok": False, "error": f"missing {SERVICE_KEY_ENV}",
+                "user_message": "공공데이터 API 인증키가 설정되지 않아 실시간 조회를 건너뜁니다. "
+                                "적재된 공공데이터로 대체 응답합니다."}
+    try:
+        data = fetch_openapi(endpoint, params, page=page, rows=rows, data_type=data_type)
+        return {"ok": True, "data": data}
+    except Exception as e:  # 네트워크/HTTP/파싱 등 모든 외부 장애 흡수
+        return {"ok": False, "error": f"{type(e).__name__}: {e}",
+                "user_message": "공공데이터포털을 일시적으로 조회할 수 없습니다. "
+                                "잠시 후 다시 시도해 주세요. (적재된 데이터로 대체 가능)"}
+
+
 def fetch_all(endpoint: str, params: Optional[dict] = None,
               rows: int = 100, max_pages: int = 50, items_path: tuple = ()) -> list[dict]:
     """페이지네이션 순회 수집. items_path로 응답 내 item 리스트 위치를 지정."""

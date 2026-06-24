@@ -32,5 +32,6 @@ switch ($cmd) {
     "serve"  { python server.py 8000 }                                        # UI 서버 → localhost:8000
     "check"  { python check_keys.py }                                         # Gemini/Voyage 키 연동 진단
     "review" { python review.py @($args) }                                    # 검수·데이터관리(목록/상태변경/이력)
+    "verify" { python verify_fr.py; python verify_requirements.py }           # 요구사항(FR-RAG/PUB/AGT) 검증
     default  { python etl.py; python ingest.py "../data/normalized.jsonl"; python demo.py }
 }

@@ -70,6 +70,21 @@ CREATE TABLE IF NOT EXISTS doc_change_log (
     new_value TEXT,
     note      TEXT
 );
+
+-- 에이전트 단계별 실행 트레이스 (FR-AGT-004 / AT-AGT-02)
+-- 한 질의(run_id) 안에서 의도분석 → 도구호출 → 도구결과 → 최종답변을 순서대로 기록.
+CREATE TABLE IF NOT EXISTS agent_trace (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    run_id     TEXT,    -- 질의 1건을 묶는 식별자(타임스탬프 기반)
+    ts         TEXT,
+    step_no    INTEGER, -- 실행 순서 (1부터)
+    step_type  TEXT,    -- intent | tool_call | tool_result | final
+    module     TEXT,    -- 라우팅 모듈명 (RAG/공공데이터/보고서/VLM 등)
+    tool_name  TEXT,
+    tool_input TEXT,    -- JSON
+    detail     TEXT     -- JSON (결과 요약/의도/최종답변 등)
+);
+CREATE INDEX IF NOT EXISTS idx_trace_run ON agent_trace (run_id, step_no);
 """
 
 
@@ -188,6 +203,45 @@ def get_cached_answer(conn: sqlite3.Connection, question: str,
         "SELECT answer FROM query_history WHERE question=? AND provider=? "
         "ORDER BY id DESC LIMIT 1", (question, provider)).fetchone()
     return row["answer"] if row else None
+
+
+def ensure_schema(conn: sqlite3.Connection) -> None:
+    """DDL을 IF NOT EXISTS로 재적용 — 신규 테이블(agent_trace 등) 마이그레이션 안전."""
+    conn.executescript(DDL)
+    conn.commit()
+
+
+def log_trace(conn: sqlite3.Connection, run_id: str, ts: str, step_no: int,
+              step_type: str, module: str = "", tool_name: str = "",
+              tool_input: Optional[dict] = None, detail: Any = None) -> None:
+    """에이전트 실행 단계 1건을 기록 (FR-AGT-004)."""
+    conn.execute(
+        "INSERT INTO agent_trace "
+        "(run_id, ts, step_no, step_type, module, tool_name, tool_input, detail) "
+        "VALUES (?,?,?,?,?,?,?,?)",
+        (run_id, ts, step_no, step_type, module, tool_name,
+         json.dumps(tool_input, ensure_ascii=False) if tool_input is not None else None,
+         json.dumps(detail, ensure_ascii=False) if detail is not None else None),
+    )
+    conn.commit()
+
+
+def get_trace(conn: sqlite3.Connection, run_id: Optional[str] = None,
+              limit: int = 200) -> list[dict[str, Any]]:
+    """실행 트레이스 조회. run_id 지정 시 해당 질의의 단계만 순서대로 반환."""
+    if run_id:
+        rows = conn.execute(
+            "SELECT * FROM agent_trace WHERE run_id=? ORDER BY step_no", (run_id,)).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM agent_trace ORDER BY id DESC LIMIT ?", (limit,)).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["tool_input"] = json.loads(d["tool_input"]) if d.get("tool_input") else None
+        d["detail"] = json.loads(d["detail"]) if d.get("detail") else None
+        out.append(d)
+    return out
 
 
 def set_review_status(conn: sqlite3.Connection, doc_id: str, status: str,
