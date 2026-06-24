@@ -1,9 +1,9 @@
-"""LLM 프로바이더 — Gemini 3.5 Flash (google-genai SDK).
+"""LLM 프로바이더 — Gemini 3.1 Flash-Lite (google-genai SDK).
 
 GEMINI_API_KEY (또는 GOOGLE_API_KEY)가 있으면 Gemini로 에이전트 루프를 돈다.
 없으면 agent.py의 오프라인 규칙 라우터가 동작한다.
 
-모델 ID는 GEMINI_MODEL 환경변수로 덮어쓸 수 있다(기본 gemini-3.5-flash).
+모델 ID는 GEMINI_MODEL 환경변수로 덮어쓸 수 있다(기본 gemini-3.1-flash-lite).
 """
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ import os
 import time
 from typing import Any, Callable
 
-MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
+MODEL = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
 
 # 일시적 서버 장애(과부하)만 재시도로 흡수한다.
 # 429/RESOURCE_EXHAUSTED(일일 무료 한도)는 재시도해도 소용없어 즉시 폴백시킨다.

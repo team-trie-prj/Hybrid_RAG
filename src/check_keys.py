@@ -16,7 +16,7 @@ voy = os.getenv("VOYAGE_API_KEY")
 print(f"  GEMINI_API_KEY : {mask(os.getenv('GEMINI_API_KEY'))}")
 print(f"  GOOGLE_API_KEY : {mask(os.getenv('GOOGLE_API_KEY'))}")
 print(f"  VOYAGE_API_KEY : {mask(voy)}")
-print(f"  GEMINI_MODEL   : {os.getenv('GEMINI_MODEL') or '(기본 gemini-3.5-flash)'}")
+print(f"  GEMINI_MODEL   : {os.getenv('GEMINI_MODEL') or '(기본 gemini-3.1-flash-lite)'}")
 
 print("\n=== 2) Voyage 임베딩 실제 호출 ===")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -47,7 +47,7 @@ if not gem:
 else:
     try:
         from google import genai
-        model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
+        model = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
         client = genai.Client()
         resp = client.models.generate_content(model=model, contents="한 단어로만 답해: 안녕?")
         txt = (getattr(resp, "text", None) or "").strip()

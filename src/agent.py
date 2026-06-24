@@ -2,7 +2,7 @@
 
 특정 시나리오(포트홀)에 고정되지 않고, 적재된 어떤 도메인이든
 질의 의도에 따라 검색·집계 도구를 호출한다.
-- GEMINI_API_KEY 있으면 Gemini 3.5 Flash가 라우팅, 없으면 규칙 라우터 폴백.
+- GEMINI_API_KEY 있으면 Gemini 3.1 Flash-Lite가 라우팅, 없으면 규칙 라우터 폴백.
 
 도구:
   hybrid_search(query, domain?, region?, doc_type?, period?, k)
@@ -139,7 +139,7 @@ def _fallback(question: str, idx: Index) -> str:
     elif intent["sido_cd"]:
         flt["sido_cd"] = intent["sido_cd"]
 
-    out = ["[오프라인 폴백 라우터 — GEMINI_API_KEY 설정 시 Gemini 3.5 Flash가 응답]"]
+    out = ["[오프라인 폴백 라우터 — GEMINI_API_KEY 설정 시 Gemini 3.1 Flash-Lite가 응답]"]
     out.append(f"의도: domain={intent['domain'] or '전체'} / region={intent['region'] or '전국'}\n")
 
     if not intent["is_stats"] or intent["is_report"]:

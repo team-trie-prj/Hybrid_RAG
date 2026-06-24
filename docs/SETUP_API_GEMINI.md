@@ -40,7 +40,7 @@
 
 ---
 
-## 2. Gemini 3.5 Flash 불러오기
+## 2. Gemini 3.1 Flash-Lite 불러오기
 
 ### 키 발급
 1. [Google AI Studio](https://aistudio.google.com/app/apikey) 접속 (구글 계정 로그인)
@@ -49,7 +49,7 @@
 ### 설정
 ```powershell
 $env:GEMINI_API_KEY = "발급받은_API_KEY"     # 또는 GOOGLE_API_KEY
-# (선택) 모델 변경:  $env:GEMINI_MODEL = "gemini-3.5-flash"
+# (선택) 모델 변경:  $env:GEMINI_MODEL = "gemini-3.1-flash-lite"
 ```
 
 ### 동작 확인
@@ -60,7 +60,7 @@ $env:GEMINI_API_KEY = "발급받은_API_KEY"     # 또는 GOOGLE_API_KEY
 - 키가 없으면 자동으로 규칙 라우터로 폴백한다(데모는 그대로 동작).
 
 > 라이브러리 설치: `pip install -r requirements.txt` (google-genai 포함)
-> 코드: `src/llm.py` (function-calling 루프), 모델 ID 기본값 `gemini-3.5-flash`.
+> 코드: `src/llm.py` (function-calling 루프), 모델 ID 기본값 `gemini-3.1-flash-lite`.
 
 ---
 
@@ -77,6 +77,6 @@ $env:VOYAGE_API_KEY = "발급키"   # https://www.voyageai.com
 
 | 환경변수 | 용도 | 없을 때 |
 |---|---|---|
-| `GEMINI_API_KEY` / `GOOGLE_API_KEY` | Gemini 3.5 Flash 에이전트 | 규칙 라우터 폴백 |
+| `GEMINI_API_KEY` / `GOOGLE_API_KEY` | Gemini 3.1 Flash-Lite 에이전트 | 규칙 라우터 폴백 |
 | `DATAGO_SERVICE_KEY` | data.go.kr 오픈API 수집 | CSV 수동 적재 사용 |
 | `VOYAGE_API_KEY` | Voyage 임베딩 | 로컬 해시 임베딩 |
