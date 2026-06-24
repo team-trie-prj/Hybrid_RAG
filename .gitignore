@@ -2,6 +2,10 @@
 # preprocess_real.py 입력. 집계본(data/raw/*.csv)만 커밋한다.
 /*.csv
 
+# ── 비밀 키 (절대 커밋 금지) ──
+.env
+.env.local
+
 # ── 생성 산출물 ──
 rag.db
 report_output.docx
