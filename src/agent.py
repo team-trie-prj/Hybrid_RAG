@@ -12,12 +12,13 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 
 import llm
 import regions
 from retrieve import Index
-from schema import connect, get_history, log_query
+from schema import connect, get_cached_answer, get_history, log_query
 
 TOOLS = [
     {
@@ -166,13 +167,46 @@ def ask(question: str, idx: Index | None = None, log: bool = True) -> str:
     intent = analyze_intent(question)
     tools_used: list[str] = []
 
-    if llm.gemini_available():
+    # 캐시 우선: 동일 질의의 이전 Gemini 응답이 있으면 재사용(일일 한도 절약).
+    cached = None
+    if llm.gemini_available() and os.getenv("GEMINI_CACHE", "1") == "1":
+        c = connect(idx.db_path)
+        cached = get_cached_answer(c, question)
+        c.close()
+
+    if cached:
+        answer = "[캐시된 Gemini 응답 — 일일 한도 절약을 위해 동일 질의 재사용]\n\n" + cached
+        provider = "gemini-cache"
+        tools_used = ["cache"]
+    elif llm.gemini_available():
         try:
             answer, tools_used = llm.run_agent(
                 question, SYSTEM, TOOLS, lambda n, a: _dispatch(idx, n, a))
             provider = "gemini"
         except Exception as e:
-            answer = f"[Gemini 호출 실패: {e}]\n" + _fallback(question, idx)
+            msg = str(e)
+            # 한도 소진이어도 동일 질의의 과거 Gemini 응답이 있으면 그것을 우선 사용
+            c = connect(idx.db_path)
+            prev = get_cached_answer(c, question)
+            c.close()
+            if prev:
+                answer = "[캐시된 Gemini 응답 — 실시간 호출 실패로 이전 응답 재사용]\n\n" + prev
+                provider = "gemini-cache"
+                if log:
+                    ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
+                    conn = connect(idx.db_path)
+                    log_query(conn, ts, question, intent, ["cache"], answer, provider)
+                    conn.close()
+                return answer
+            if "429" in msg or "RESOURCE_EXHAUSTED" in msg:
+                note = ("[Gemini 무료 일일 한도 초과(프로젝트 단위) — 한도 리셋(다음 날) 또는 "
+                        "결제 등급 전환이 필요합니다. 이전에 성공한 동일 질의는 캐시로 응답되며, "
+                        "신규 질의는 아래 오프라인 라우터로 응답합니다]")
+            elif "503" in msg or "UNAVAILABLE" in msg:
+                note = "[Gemini 일시적 과부하(503) — 재시도 후에도 실패. 아래는 오프라인 라우터 응답]"
+            else:
+                note = f"[Gemini 호출 실패: {msg[:140]} … 아래는 오프라인 라우터 응답]"
+            answer = note + "\n" + _fallback(question, idx)
             provider = "offline"
     else:
         answer = _fallback(question, idx)

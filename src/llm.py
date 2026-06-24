@@ -13,8 +13,9 @@ from typing import Any, Callable
 
 MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
 
-# 일시적 장애(과부하/레이트리밋)는 재시도로 흡수 → 폴백 전에 Gemini에 기회를 더 준다.
-RETRYABLE = ("503", "unavailable", "429", "resource_exhausted", "500", "internal", "timeout")
+# 일시적 서버 장애(과부하)만 재시도로 흡수한다.
+# 429/RESOURCE_EXHAUSTED(일일 무료 한도)는 재시도해도 소용없어 즉시 폴백시킨다.
+RETRYABLE = ("503", "unavailable", "500", "internal", "timeout")
 MAX_RETRIES = int(os.getenv("GEMINI_MAX_RETRIES", "3"))
 
 

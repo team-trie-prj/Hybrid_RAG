@@ -180,6 +180,16 @@ def get_history(conn: sqlite3.Connection, limit: int = 20) -> list[dict[str, Any
     return out
 
 
+def get_cached_answer(conn: sqlite3.Connection, question: str,
+                      provider: str = "gemini") -> Optional[str]:
+    """동일 질의에 대한 가장 최근 성공 응답(기본 gemini)을 반환. 없으면 None.
+    무료 일일 한도(RPD) 소진 시 이전 LLM 답변을 재사용하기 위한 캐시."""
+    row = conn.execute(
+        "SELECT answer FROM query_history WHERE question=? AND provider=? "
+        "ORDER BY id DESC LIMIT 1", (question, provider)).fetchone()
+    return row["answer"] if row else None
+
+
 def set_review_status(conn: sqlite3.Connection, doc_id: str, status: str,
                       ts: str, note: str = "") -> None:
     cur = conn.execute("SELECT review_status FROM unified_doc WHERE doc_id=?", (doc_id,))
