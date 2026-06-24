@@ -31,5 +31,6 @@ switch ($cmd) {
     "report" { python report.py @($args) }                                    # .docx 보고서 생성
     "serve"  { python server.py 8000 }                                        # UI 서버 → localhost:8000
     "check"  { python check_keys.py }                                         # Gemini/Voyage 키 연동 진단
+    "review" { python review.py @($args) }                                    # 검수·데이터관리(목록/상태변경/이력)
     default  { python etl.py; python ingest.py "../data/normalized.jsonl"; python demo.py }
 }

@@ -17,6 +17,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import agent
 import report as report_mod
+import review as review_mod
 from retrieve import Index
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -64,6 +65,15 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, agent.history(_IDX, 30))
         if self.path == "/api/domains":
             return self._send(200, _IDX.domains())
+        if self.path.startswith("/api/docs"):
+            from urllib.parse import urlparse, parse_qs
+            qs = parse_qs(urlparse(self.path).query)
+            status = (qs.get("status") or [None])[0]
+            domain = (qs.get("domain") or [None])[0]
+            return self._send(200, {"counts": review_mod.status_counts(),
+                                    "docs": review_mod.list_docs(status, domain, limit=200)})
+        if self.path == "/api/changelog":
+            return self._send(200, review_mod.recent_changes(50))
         if self.path == "/download/report":
             if not os.path.exists(REPORT_PATH):
                 return self._send(404, {"error": "보고서가 아직 생성되지 않았습니다."})
@@ -84,6 +94,15 @@ class Handler(BaseHTTPRequestHandler):
             payload = json.loads(self.rfile.read(length) or b"{}")
         except json.JSONDecodeError:
             return self._send(400, {"error": "invalid json"})
+
+        if self.path == "/api/review":  # 검수 상태 변경 (question 불필요)
+            doc_id = (payload.get("doc_id") or "").strip()
+            status = (payload.get("status") or "").strip()
+            if not doc_id or not status:
+                return self._send(400, {"error": "doc_id, status 필요"})
+            return self._send(200, review_mod.set_status(doc_id, status,
+                                                         payload.get("note") or ""))
+
         question = (payload.get("question") or "").strip()
         if not question:
             return self._send(400, {"error": "question 필요"})

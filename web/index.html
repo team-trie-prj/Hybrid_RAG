@@ -59,6 +59,7 @@
   <div class="tabs">
     <div class="tab active" data-tab="search">질의 / 검색</div>
     <div class="tab" data-tab="history">질의 이력</div>
+    <div class="tab" data-tab="manage">데이터 관리</div>
   </div>
 
   <!-- 검색 화면 -->
@@ -108,6 +109,29 @@
       <div id="historyList" class="spin">불러오는 중…</div>
     </div>
   </section>
+
+  <!-- 데이터 관리 화면 (검수 + 변경이력) -->
+  <section id="manage" class="hidden">
+    <div class="card">
+      <h2>검수 / 데이터 관리 <span class="muted">(검수 상태 변경 → 변경이력 자동 기록)</span></h2>
+      <div id="reviewCounts" class="muted" style="margin-bottom:10px"></div>
+      <div class="qbar" style="margin-bottom:6px">
+        <select id="fStatus" class="ghost" style="flex:0 0 150px">
+          <option value="">전체 상태</option>
+          <option value="pending">검수대기(pending)</option>
+          <option value="approved">승인(approved)</option>
+          <option value="rejected">반려(rejected)</option>
+        </select>
+        <select id="fDomain" class="ghost" style="flex:0 0 150px"><option value="">전체 도메인</option></select>
+        <button class="ghost" onclick="loadDocs()">조회</button>
+      </div>
+      <div id="docList" class="spin">불러오는 중…</div>
+    </div>
+    <div class="card">
+      <h2>변경 이력 <span class="muted">(doc_change_log)</span></h2>
+      <div id="changelog" class="spin"></div>
+    </div>
+  </section>
 </div>
 
 <script>
@@ -121,7 +145,9 @@ document.querySelectorAll('.tab').forEach(tab=>{
     const id = tab.dataset.tab;
     $('#search').classList.toggle('hidden', id!=='search');
     $('#history').classList.toggle('hidden', id!=='history');
+    $('#manage').classList.toggle('hidden', id!=='manage');
     if(id==='history') loadHistory();
+    if(id==='manage') loadManage();
   };
 });
 
@@ -201,6 +227,61 @@ async function loadHistory(){
 }
 
 $('#q').addEventListener('keydown', e=>{ if(e.key==='Enter') ask(); });
+
+// ── 데이터 관리(검수) ──
+const ST_KO = {pending:'검수대기', approved:'승인', rejected:'반려'};
+const ST_COLOR = {pending:'var(--warn)', approved:'var(--public)', rejected:'#e0566b'};
+let _domainsLoaded = false;
+
+async function loadManage(){
+  if(!_domainsLoaded){
+    try{
+      const ds = await (await fetch('/api/domains')).json();
+      $('#fDomain').innerHTML = '<option value="">전체 도메인</option>' +
+        ds.map(d=>`<option value="${d.domain}">${d.domain} (${d.count})</option>`).join('');
+      _domainsLoaded = true;
+    }catch(e){}
+  }
+  loadDocs(); loadChangelog();
+}
+
+async function loadDocs(){
+  $('#docList').textContent = '불러오는 중…';
+  const st = $('#fStatus').value, dm = $('#fDomain').value;
+  const r = await fetch(`/api/docs?status=${encodeURIComponent(st)}&domain=${encodeURIComponent(dm)}`);
+  const d = await r.json();
+  $('#reviewCounts').innerHTML = '검수 현황: ' +
+    Object.entries(d.counts).map(([k,v])=>`<b style="color:${ST_COLOR[k]||'var(--txt)'}">${ST_KO[k]||k} ${v}</b>`).join(' · ');
+  $('#docList').innerHTML = d.docs.length ? `<table>
+    <thead><tr><th>상태</th><th>제목</th><th>도메인</th><th>검수</th></tr></thead><tbody>` +
+    d.docs.map(x=>`<tr>
+      <td><span class="badge" style="background:rgba(255,255,255,.07);color:${ST_COLOR[x.review_status]||'var(--txt)'}">${ST_KO[x.review_status]||x.review_status}</span></td>
+      <td>${x.title}<div class="muted" style="font-size:11px">${x.doc_id}</div></td>
+      <td class="muted">${x.domain||'-'}</td>
+      <td style="white-space:nowrap">
+        <button class="ghost" style="padding:5px 9px;font-size:12px" onclick="setReview('${x.doc_id}','approved')">승인</button>
+        <button class="ghost" style="padding:5px 9px;font-size:12px" onclick="setReview('${x.doc_id}','rejected')">반려</button>
+      </td></tr>`).join('') + '</tbody></table>'
+    : '<div class="muted">문서 없음</div>';
+}
+
+async function setReview(docId, status){
+  const r = await fetch('/api/review',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({doc_id:docId, status:status, note:'UI 검수'})});
+  const d = await r.json();
+  if(d.ok){ loadDocs(); loadChangelog(); }
+  else { alert('검수 실패: ' + (d.error||'')); }
+}
+
+async function loadChangelog(){
+  const rows = await (await fetch('/api/changelog')).json();
+  $('#changelog').innerHTML = rows.length
+    ? rows.map(c=>`<div class="hrow"><span class="badge b-prov">${c.action}</span>
+        <span class="muted"> ${c.ts} · ${c.doc_id}</span>${
+        c.field?` <span class="muted">— ${c.field}: ${c.old_value}→${c.new_value}</span>`:''}${
+        c.note?` <span class="muted">(${c.note})</span>`:''}</div>`).join('')
+    : '<div class="muted">변경 이력이 없습니다.</div>';
+}
 </script>
 </body>
 </html>
