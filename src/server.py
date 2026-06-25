@@ -6,6 +6,8 @@
   GET  /api/history      → 질의 이력
   GET  /api/trace[?run_id=] → 에이전트 단계별 실행 트레이스 (FR-AGT-004)
   POST /api/report       {question} → {path}  (.docx 생성)
+  POST /api/report_md    {question} → {markdown, path, download}  (FR-RPT 마크다운)
+  GET  /download/report.md → 생성된 마크다운 보고서 다운로드
   GET  /download/report  → 생성된 보고서 다운로드
 
 실행:  python server.py   →  http://localhost:8000
@@ -24,6 +26,7 @@ from retrieve import Index
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WEB = os.path.join(ROOT, "web")
 REPORT_PATH = os.path.join(ROOT, "report_output.docx")
+REPORT_MD_PATH = os.path.join(ROOT, "report_output.md")
 
 _IDX = Index()  # 서버 기동 시 1회 로드
 
@@ -93,6 +96,17 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_header("Content-Length", str(len(body)))
                 self.end_headers()
                 return self.wfile.write(body)
+        if self.path == "/download/report.md":
+            if not os.path.exists(REPORT_MD_PATH):
+                return self._send(404, {"error": "마크다운 보고서가 아직 생성되지 않았습니다."})
+            with open(REPORT_MD_PATH, "rb") as f:
+                self.send_response(200)
+                self.send_header("Content-Type", "text/markdown; charset=utf-8")
+                self.send_header("Content-Disposition", 'attachment; filename="report.md"')
+                body = f.read()
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                return self.wfile.write(body)
         return self._send(404, {"error": "not found"})
 
     def do_POST(self):
@@ -119,6 +133,10 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == "/api/report":
             path = report_mod.generate_report(question, _IDX, REPORT_PATH)
             return self._send(200, {"path": path, "download": "/download/report"})
+        if self.path == "/api/report_md":
+            md, path = report_mod.generate_markdown_report(question, _IDX, REPORT_MD_PATH)
+            return self._send(200, {"markdown": md, "path": path,
+                                    "download": "/download/report.md"})
         return self._send(404, {"error": "not found"})
 
 

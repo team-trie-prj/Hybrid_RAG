@@ -67,6 +67,7 @@
     <div class="qbar">
       <input id="q" placeholder="예) 대전 유성구 포트홀 영역을 찾아줘" />
       <button class="primary" onclick="ask()">검색·질의</button>
+      <button class="ghost" onclick="makeReportMd()">보고서(.md)</button>
       <button class="ghost" onclick="makeReport()">보고서(.docx)</button>
     </div>
     <div class="chips">
@@ -97,8 +98,15 @@
 
     <div id="statsCard" class="card hidden">
       <h2 id="statsTitle">통계 집계</h2>
+      <div id="statsChart"></div>
       <table><thead><tr><th id="statsCol">구분</th><th>값</th><th style="width:45%">비율</th></tr></thead>
       <tbody id="stats"></tbody></table>
+    </div>
+
+    <div id="reportCard" class="card hidden">
+      <h2>마크다운 보고서 <span class="muted">(요약·근거·출처 — FR-RPT)</span>
+        <a id="mdDownload" href="/download/report.md" style="float:right;font-size:12px">⬇ .md 다운로드</a></h2>
+      <div id="reportMd" class="answer"></div>
     </div>
   </section>
 
@@ -156,7 +164,7 @@ const TYPE_KO = {pothole:'포트홀', accident_stat:'사고통계', road_infra:'
 async function ask(){
   const q = $('#q').value.trim(); if(!q) return;
   $('#status').textContent = '검색 중…';
-  ['answerCard','hitsCard','linkCard','statsCard'].forEach(i=>$('#'+i).classList.add('hidden'));
+  ['answerCard','hitsCard','linkCard','statsCard','reportCard'].forEach(i=>$('#'+i).classList.add('hidden'));
   const r = await fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},
                                     body:JSON.stringify({question:q})});
   const d = await r.json();
@@ -196,8 +204,29 @@ async function ask(){
     const max = Math.max(...d.stats.map(s=>s.value||0)) || 1;
     $('#stats').innerHTML = d.stats.map(s=>`<tr><td>${s.label}</td><td>${(s.value||0).toLocaleString()}</td>
       <td><div class="bar" style="width:${Math.round((s.value||0)/max*100)}%"></div></td></tr>`).join('');
+    renderChart(d.stats, d.metric_label||'값');   // FR-PUB-003 차트 시각화
     $('#statsCard').classList.remove('hidden');
   } else { $('#statsCard').classList.add('hidden'); }
+}
+
+// FR-PUB-003: 조회된 통계를 SVG 막대 차트로 시각화 (수치 라벨이 표 값과 일치)
+function renderChart(stats, label){
+  const data = stats.slice(0, 8);
+  const W = 720, rowH = 30, padL = 120, padR = 70, top = 26;
+  const H = top + data.length*rowH + 12;
+  const max = Math.max(...data.map(s=>s.value||0)) || 1;
+  const barMax = W - padL - padR;
+  const esc = t => String(t).replace(/[<&>]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(label)} 막대 차트">`;
+  svg += `<text x="${padL}" y="16" fill="var(--mut)" font-size="12">${esc(label)} (상위 ${data.length})</text>`;
+  data.forEach((s,i)=>{
+    const y = top + i*rowH, v = s.value||0, w = Math.max(2, Math.round(v/max*barMax));
+    svg += `<text x="${padL-8}" y="${y+15}" text-anchor="end" fill="var(--txt)" font-size="12">${esc(s.label)}</text>`;
+    svg += `<rect x="${padL}" y="${y+3}" width="${w}" height="${rowH-12}" rx="3" fill="var(--accent)"></rect>`;
+    svg += `<text x="${padL+w+6}" y="${y+15}" fill="var(--mut)" font-size="12">${v.toLocaleString()}</text>`;
+  });
+  svg += `</svg>`;
+  $('#statsChart').innerHTML = svg;
 }
 
 async function loadDomains(){
@@ -217,6 +246,20 @@ async function makeReport(){
   const d = await r.json();
   $('#status').textContent = '';
   if(d.download){ window.location = d.download; }
+}
+
+// FR-RPT: 마크다운 보고서 생성 → 화면 미리보기 + .md 다운로드 링크
+async function makeReportMd(){
+  const q = $('#q').value.trim(); if(!q) return;
+  $('#status').textContent = '마크다운 보고서 생성 중…';
+  const r = await fetch('/api/report_md',{method:'POST',headers:{'Content-Type':'application/json'},
+                                          body:JSON.stringify({question:q})});
+  const d = await r.json();
+  $('#status').textContent = '';
+  $('#reportMd').textContent = d.markdown || '(생성 실패)';
+  $('#mdDownload').href = d.download || '/download/report.md';
+  $('#reportCard').classList.remove('hidden');
+  $('#reportCard').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 
 async function loadHistory(){

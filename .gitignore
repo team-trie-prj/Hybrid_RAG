@@ -9,6 +9,7 @@
 # ── 생성 산출물 ──
 rag.db
 report_output.docx
+report_output.md
 
 # ── Python ──
 __pycache__/
