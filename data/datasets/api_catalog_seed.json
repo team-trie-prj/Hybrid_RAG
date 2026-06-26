@@ -1,0 +1,1702 @@
+[
+  {
+    "dataset_id": "15073861",
+    "title": "에어코리아 대기오염정보",
+    "source": "data.go.kr",
+    "org": "한국환경공단",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15073861/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15073885",
+    "title": "에어코리아 미세먼지 경보 발령 현황",
+    "source": "data.go.kr",
+    "org": "한국환경공단",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15073885/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15112307",
+    "title": "에어코리아 고농도 초미세먼지 예보",
+    "source": "data.go.kr",
+    "org": "한국환경공단",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15112307/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15075624",
+    "title": "에어코리아 사용자 지원(측정소 부가)",
+    "source": "data.go.kr",
+    "org": "한국환경공단",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15075624/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15156708",
+    "title": "에어코리아 측정소 정보 조회",
+    "source": "data.go.kr",
+    "org": "한국환경공단",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15156708/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15104339",
+    "title": "대전교통공사 초미세먼지측정정보",
+    "source": "data.go.kr",
+    "org": "대전교통공사",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15104339/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15057173",
+    "title": "부산광역시 대기질 정보 조회",
+    "source": "data.go.kr",
+    "org": "부산광역시",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15057173/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15084084",
+    "title": "기상청 단기예보 조회서비스",
+    "source": "data.go.kr",
+    "org": "기상청",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15084084/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15059468",
+    "title": "기상청 중기예보 조회서비스",
+    "source": "data.go.kr",
+    "org": "기상청",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15059468/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15081073",
+    "title": "국립환경과학원 수질 DB",
+    "source": "data.go.kr",
+    "org": "국립환경과학원",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15081073/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15056633",
+    "title": "국립환경과학원 생활계 물사용량 정보",
+    "source": "data.go.kr",
+    "org": "국립환경과학원",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15056633/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15106003",
+    "title": "한국환경공단 폐기물통계정보",
+    "source": "data.go.kr",
+    "org": "한국환경공단",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15106003/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15139225",
+    "title": "전국폐수처리업체표준데이터",
+    "source": "data.go.kr",
+    "org": "환경부",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "standard",
+    "provenance_url": "https://www.data.go.kr/data/15139225/standard.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15134417",
+    "title": "한국수자원공사 지하수 오염측정망 수질정보",
+    "source": "data.go.kr",
+    "org": "한국수자원공사",
+    "domain": "대기환경",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15134417/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15057467",
+    "title": "도로교통공단 지자체별 교통사고 다발지역",
+    "source": "data.go.kr",
+    "org": "도로교통공단",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15057467/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15057393",
+    "title": "경기도 사고다발지 현황",
+    "source": "data.go.kr",
+    "org": "경기도",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15057393/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15076684",
+    "title": "한국도로공사 실시간 소통 데이터",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15076684/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15076696",
+    "title": "한국도로공사 현재 교통예보 현황",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15076696/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15076721",
+    "title": "한국도로공사 톨게이트 입/출구 교통량",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15076721/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15076872",
+    "title": "한국도로공사 실시간 영업소별 교통량",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15076872/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15076822",
+    "title": "한국도로공사 실시간 전국 교통량",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15076822/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15150101",
+    "title": "한국교통안전공단 주차장실시간정보",
+    "source": "data.go.kr",
+    "org": "한국교통안전공단",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15150101/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15099883",
+    "title": "한국교통안전공단 주차정보 제공 API",
+    "source": "data.go.kr",
+    "org": "한국교통안전공단",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15099883/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15098534",
+    "title": "국토교통부(TAGO) 버스정류소정보",
+    "source": "data.go.kr",
+    "org": "국토교통부",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15098534/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15012896",
+    "title": "전국주차장정보표준데이터",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "standard",
+    "provenance_url": "https://www.data.go.kr/data/15012896/standard.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15058320",
+    "title": "대전광역시 노선정보조회 서비스",
+    "source": "data.go.kr",
+    "org": "대전광역시",
+    "domain": "교통안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15058320/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15142616",
+    "title": "한국도로공사 포트홀 및 피해배상 현황",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "도로시설",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15142616/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15050223",
+    "title": "한국도로공사 포장 보수현황",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "도로시설",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15050223/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15097977",
+    "title": "전북특별자치도 포트홀 보수 데이터",
+    "source": "data.go.kr",
+    "org": "전북특별자치도",
+    "domain": "도로시설",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15097977/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15076874",
+    "title": "한국도로공사 고속도로 공사현황",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "도로시설",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15076874/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15076644",
+    "title": "한국도로공사 휴게소 편의시설 현황",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "도로시설",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15076644/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15076641",
+    "title": "한국도로공사 노선별 휴게시설 현황",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "도로시설",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15076641/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15062048",
+    "title": "한국도로공사 공간정보 노선기본",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "도로시설",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15062048/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15085543",
+    "title": "한국도로공사 휴게소 전기차/수소차 충전소 현황",
+    "source": "data.go.kr",
+    "org": "한국도로공사",
+    "domain": "도로시설",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15085543/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15134735",
+    "title": "국토교통부 건축HUB 건축물대장정보",
+    "source": "data.go.kr",
+    "org": "국토교통부",
+    "domain": "도로시설",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15134735/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15077644",
+    "title": "소방청 화재정보서비스",
+    "source": "data.go.kr",
+    "org": "소방청",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15077644/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15099423",
+    "title": "소방청 구급정보서비스",
+    "source": "data.go.kr",
+    "org": "소방청",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15099423/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15155779",
+    "title": "소방청 특정소방대상물 소방시설정보서비스",
+    "source": "data.go.kr",
+    "org": "소방청",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15155779/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15134001",
+    "title": "행정안전부 긴급재난문자",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15134001/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15139158",
+    "title": "소방청 119구급서비스 통계연보",
+    "source": "data.go.kr",
+    "org": "소방청",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15139158/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15128648",
+    "title": "국민권익위 민원빅데이터 분석정보 API",
+    "source": "data.go.kr",
+    "org": "국민권익위원회",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15128648/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15025425",
+    "title": "소방청 헬기 구조 현황",
+    "source": "data.go.kr",
+    "org": "소방청",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15025425/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15080972",
+    "title": "소방청 세종시 화재 종별 신고",
+    "source": "data.go.kr",
+    "org": "소방청",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15080972/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15080046",
+    "title": "소방청 본부별 구급활동정보",
+    "source": "data.go.kr",
+    "org": "소방청",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15080046/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15149423",
+    "title": "한국환경공단 유독물GHS 정보 조회",
+    "source": "data.go.kr",
+    "org": "한국환경공단",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15149423/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15149420",
+    "title": "한국환경공단 화학물질 정보 조회",
+    "source": "data.go.kr",
+    "org": "한국환경공단",
+    "domain": "재난안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15149420/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15108065",
+    "title": "행안부 행정동별 주민등록 인구·세대현황",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "인구",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15108065/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15108072",
+    "title": "행안부 행정동별 성/연령별 주민등록 인구수",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "인구",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15108072/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15108092",
+    "title": "행안부 도로명별 주민등록 인구·세대현황",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "인구",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15108092/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15107303",
+    "title": "행안부 통계연보 지역별 주민등록인구",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "인구",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15107303/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15108093",
+    "title": "행안부 지역별 인구이동 현황",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "인구",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15108093/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15101889",
+    "title": "행안부 생활안전지도 치안안전시설",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15101889/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "3068943",
+    "title": "국토교통부 교통CCTV",
+    "source": "data.go.kr",
+    "org": "국토교통부",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/3068943/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15012891",
+    "title": "전국어린이보호구역표준데이터",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "standard",
+    "provenance_url": "https://www.data.go.kr/data/15012891/standard.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15056759",
+    "title": "어린이보호구역(위치·CCTV)",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15056759/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15075538",
+    "title": "행안부 CCTV정보",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15075538/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15010990",
+    "title": "전주시 어린이보호구역",
+    "source": "data.go.kr",
+    "org": "전주시",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15010990/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15034535",
+    "title": "전국여성안심지킴이집표준데이터",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "standard",
+    "provenance_url": "https://www.data.go.kr/data/15034535/standard.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15057670",
+    "title": "경찰청 습득물정보 조회 서비스",
+    "source": "data.go.kr",
+    "org": "경찰청",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15057670/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15000651",
+    "title": "경찰청 공통코드조회 서비스",
+    "source": "data.go.kr",
+    "org": "경찰청",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15000651/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15146211",
+    "title": "서울특별시 실시간 도시데이터",
+    "source": "data.go.kr",
+    "org": "서울특별시",
+    "domain": "생활안전",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15146211/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15075537",
+    "title": "행안부 무료와이파이정보",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "file",
+    "provenance_url": "https://www.data.go.kr/data/15075537/fileData.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15056929",
+    "title": "국토교통부 노인복지시설",
+    "source": "data.go.kr",
+    "org": "국토교통부",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15056929/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15000736",
+    "title": "국립중앙의료원 전국 병·의원 찾기",
+    "source": "data.go.kr",
+    "org": "국립중앙의료원",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15000736/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15000576",
+    "title": "국립중앙의료원 전국 약국 정보",
+    "source": "data.go.kr",
+    "org": "국립중앙의료원",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15000576/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15011425",
+    "title": "경기도 공중화장실 현황",
+    "source": "data.go.kr",
+    "org": "경기도",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15011425/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15077995",
+    "title": "대전광역시 서구 공중화장실",
+    "source": "data.go.kr",
+    "org": "대전광역시서구",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15077995/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15001699",
+    "title": "건강보험심사평가원 의료기관별상세정보서비스",
+    "source": "data.go.kr",
+    "org": "건강보험심사평가원",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15001699/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15001698",
+    "title": "건강보험심사평가원 병원정보서비스",
+    "source": "data.go.kr",
+    "org": "건강보험심사평가원",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15001698/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15087442",
+    "title": "질병관리청 국가건강정보포털",
+    "source": "data.go.kr",
+    "org": "질병관리청",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15087442/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15063908",
+    "title": "식약처 묶음의약품정보서비스",
+    "source": "data.go.kr",
+    "org": "식품의약품안전처",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15063908/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15047819",
+    "title": "건강보험심사평가원 의약품사용정보조회서비스",
+    "source": "data.go.kr",
+    "org": "건강보험심사평가원",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15047819/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15013109",
+    "title": "전국도서관표준데이터",
+    "source": "data.go.kr",
+    "org": "행정안전부",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "standard",
+    "provenance_url": "https://www.data.go.kr/data/15013109/standard.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15068423",
+    "title": "식약처 연구관리 기술 분류 정보조회",
+    "source": "data.go.kr",
+    "org": "식품의약품안전처",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15068423/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15080330",
+    "title": "식약처 연구관리 기관 조회서비스",
+    "source": "data.go.kr",
+    "org": "식품의약품안전처",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15080330/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15013115",
+    "title": "전국전기차충전소표준데이터",
+    "source": "data.go.kr",
+    "org": "환경부",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "standard",
+    "provenance_url": "https://www.data.go.kr/data/15013115/standard.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15124909",
+    "title": "전국 관광지 주변 전기차충전소 정보",
+    "source": "data.go.kr",
+    "org": "한국문화정보원",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15124909/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15147132",
+    "title": "한국전력공사 전기차 충전소 운영 정보",
+    "source": "data.go.kr",
+    "org": "한국전력공사",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15147132/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15097923",
+    "title": "한국에너지공단 전기차 급속충전기 충전 정보",
+    "source": "data.go.kr",
+    "org": "한국에너지공단",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15097923/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15134145",
+    "title": "한국수자원공사 상수도 정수 수질검사 정보",
+    "source": "data.go.kr",
+    "org": "한국수자원공사",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15134145/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15126469",
+    "title": "국토교통부 아파트 매매 실거래가 자료",
+    "source": "data.go.kr",
+    "org": "국토교통부",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15126469/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15126474",
+    "title": "국토교통부 아파트 전월세 실거래가 자료",
+    "source": "data.go.kr",
+    "org": "국토교통부",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15126474/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15126471",
+    "title": "국토교통부 아파트 분양권전매 실거래가 자료",
+    "source": "data.go.kr",
+    "org": "국토교통부",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15126471/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15126463",
+    "title": "국토교통부 상업업무용 부동산 매매 실거래가",
+    "source": "data.go.kr",
+    "org": "국토교통부",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15126463/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  },
+  {
+    "dataset_id": "15134761",
+    "title": "한국부동산원 부동산통계 조회 서비스",
+    "source": "data.go.kr",
+    "org": "한국부동산원",
+    "domain": "생활복지",
+    "doc_type": "open_api",
+    "data_type": "api",
+    "provenance_url": "https://www.data.go.kr/data/15134761/openapi.do",
+    "api": {
+      "endpoint": "",
+      "params": {},
+      "items_path": [
+        "response",
+        "body",
+        "items",
+        "item"
+      ]
+    }
+  }
+]

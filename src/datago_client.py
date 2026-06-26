@@ -56,6 +56,29 @@ def fetch_openapi(endpoint: str, params: Optional[dict] = None,
     return {"xml_items": [{c.tag: c.text for c in item} for item in root.iter("item")]}
 
 
+AIRKOREA_ENDPOINT = ("http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/"
+                     "getCtprvnRltmMesureDnsty")
+
+
+def fetch_airkorea_realtime(sido: str = "대전", rows: int = 50) -> dict[str, Any]:
+    """에어코리아 대기오염정보(15073861) 시도별 실시간 측정정보 라이브 조회.
+
+    FR-PUB-001/002 라이브 연동. graceful: 장애/미인증 시 ok=False + user_message.
+    반환 ok=True 시 data={"sido","items":[{station,pm10,pm25,dataTime}...]}.
+    """
+    safe = fetch_openapi_safe(
+        AIRKOREA_ENDPOINT,
+        {"sidoName": sido, "returnType": "json", "numOfRows": rows, "pageNo": 1, "ver": "1.3"},
+    )
+    if not safe["ok"]:
+        return safe
+    body = (safe["data"].get("response", {}) or {}).get("body", {}) or {}
+    items = body.get("items", []) or []
+    out = [{"station": it.get("stationName"), "pm10": it.get("pm10Value"),
+            "pm25": it.get("pm25Value"), "dataTime": it.get("dataTime")} for it in items]
+    return {"ok": True, "data": {"sido": sido, "total": body.get("totalCount"), "items": out}}
+
+
 def fetch_openapi_safe(endpoint: str, params: Optional[dict] = None,
                        page: int = 1, rows: int = 100, data_type: str = "JSON"
                        ) -> dict[str, Any]:
