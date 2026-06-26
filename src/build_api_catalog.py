@@ -121,12 +121,26 @@ SEED_DATASETS: list[tuple] = [
 ]
 
 _TYPE_SUFFIX = {"api": "openapi.do", "standard": "standard.do", "file": "fileData.do"}
+HARVEST_FILE = os.path.join(ROOT, "data", "datasets", "api_catalog_harvested.json")
+
+
+def _load_harvested() -> list[tuple]:
+    """웹 수확분(api_catalog_harvested.json)을 튜플 목록으로 로드(있으면)."""
+    if not os.path.exists(HARVEST_FILE):
+        return []
+    with open(HARVEST_FILE, encoding="utf-8") as f:
+        rows = json.load(f)
+    return [(r["dataset_id"], r["title"], r.get("org", ""), r.get("domain", "기타"),
+             r.get("data_type", "api")) for r in rows]
 
 
 def seed_catalog() -> list[dict]:
-    """검증된 실데이터 시드를 카탈로그 항목 형식으로 확장."""
-    out = []
-    for ds_id, title, org, domain, typ in SEED_DATASETS:
+    """검증된 실데이터 시드(코어 + 웹 수확분)를 카탈로그 항목 형식으로 확장(ID 중복 제거)."""
+    out, seen = [], set()
+    for ds_id, title, org, domain, typ in list(SEED_DATASETS) + _load_harvested():
+        if ds_id in seen:
+            continue
+        seen.add(ds_id)
         url = f"https://www.data.go.kr/data/{ds_id}/{_TYPE_SUFFIX.get(typ, 'openapi.do')}"
         out.append({
             "dataset_id": ds_id, "title": title, "source": "data.go.kr",
